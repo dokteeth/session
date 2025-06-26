@@ -80,9 +80,7 @@
 
     fetch("https://script.google.com/macros/s/AKfycbwiHoQoANM2pIGbTcN_cB0_FY6OZTqiNNb_dOCmkwocwdlxDLKweyNwYwJ69QqPhYKA/exec", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(data)
     })
     .then(() => {
