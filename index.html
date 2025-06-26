@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <title>تسجيل جلسة علاج</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <style>
     body {
       background-color: #0A3D62;
@@ -52,48 +53,39 @@
 <h2>تسجيل جلسة علاج</h2>
 <form id="session-form">
   <label>اسم المريض:</label>
-  <input type="text" name="اسم المريض" required>
+  <input type="text" name="patient_name" required>
 
   <label>تاريخ الجلسة:</label>
-  <input type="date" name="تاريخ الجلسة" required>
+  <input type="date" name="session_date" required>
 
   <label>رقم الجلسة:</label>
-  <input type="text" name="رقم الجلسة" required>
+  <input type="text" name="session_number" required>
 
   <label>ملاحظات:</label>
-  <textarea name="ملاحظات" rows="3"></textarea>
+  <textarea name="notes" rows="3"></textarea>
 
   <button type="submit">تسجيل الجلسة</button>
 </form>
 
 <script>
+  (function(){
+    emailjs.init("24CwhSffG61nQM8qj"); // مفتاحك العام
+  })();
+
   const sessionForm = document.getElementById("session-form");
 
   sessionForm.addEventListener("submit", function(e) {
     e.preventDefault();
 
-    const formData = new FormData(sessionForm);
-    const data = {};
-    formData.forEach((value, key) => {
-      data[key] = value;
-    });
-
-    fetch("https://script.google.com/macros/s/AKfycbwiHoQoANM2pIGbTcN_cB0_FY6OZTqiNNb_dOCmkwocwdlxDLKweyNwYwJ69QqPhYKA/exec", {
-  method: "POST",
-  headers: {
-    "Content-Type": "text/plain;charset=utf-8"
-  },
-  body: JSON.stringify(data)
-})
-.then(() => {
-  alert("✅ تم تسجيل الجلسة بنجاح");
-  sessionForm.reset();
-})
-.catch((error) => {
-  alert("❌ حدث خطأ أثناء تسجيل الجلسة");
-  console.error(error);
-});
-  }
+    emailjs.sendForm('service_yqk2arm', 'template_0y04gk5', this)
+      .then(() => {
+        alert("✅ تم إرسال الجلسة إلى البريد الإلكتروني بنجاح");
+        sessionForm.reset();
+      }, (error) => {
+        alert("❌ حدث خطأ أثناء إرسال الجلسة");
+        console.error(error);
+      });
+  });
 </script>
 
 </body>
