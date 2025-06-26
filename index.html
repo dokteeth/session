@@ -79,21 +79,21 @@
     });
 
     fetch("https://script.google.com/macros/s/AKfycbwiHoQoANM2pIGbTcN_cB0_FY6OZTqiNNb_dOCmkwocwdlxDLKweyNwYwJ69QqPhYKA/exec", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    })
-    .then(() => {
-      alert("✅ تم تسجيل الجلسة بنجاح");
-      sessionForm.reset();
-    })
-    .catch((error) => {
-      alert("❌ حدث خطأ أثناء تسجيل الجلسة");
-      console.error(error);
-    });
-  });
+  method: "POST",
+  headers: {
+    "Content-Type": "text/plain;charset=utf-8"
+  },
+  body: JSON.stringify(data)
+})
+.then(() => {
+  alert("✅ تم تسجيل الجلسة بنجاح");
+  sessionForm.reset();
+})
+.catch((error) => {
+  alert("❌ حدث خطأ أثناء تسجيل الجلسة");
+  console.error(error);
+});
+  }
 </script>
 
 </body>
