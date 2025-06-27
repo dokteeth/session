@@ -89,6 +89,40 @@
       display: block;
     }
 
+    /* ✅ نافذة النجاح */
+    #success-popup {
+      position: fixed;
+      top: 50%;
+      right: 50%;
+      transform: translate(50%, -50%);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      padding: 20px 25px;
+      border-radius: 12px;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      color: #F4C542;
+      font-weight: bold;
+      font-size: 20px;
+      font-family: 'Cairo', sans-serif;
+      text-align: center;
+      z-index: 9999;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: none;
+    }
+
+    #success-popup.show {
+      display: block;
+      opacity: 1;
+    }
+
+    #success-popup.hide {
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+
     @media screen and (max-width: 600px) {
       body {
         padding: 15px;
@@ -124,15 +158,18 @@
 
   <label>رقم الجلسة:</label>
   <input type="text" name="session_number"
-       pattern="[\d\u0660-\u0669]+"
-       inputmode="numeric"
-       required>
+         pattern="[\d\u0660-\u0669]+"
+         inputmode="numeric"
+         required>
 
   <label>ملاحظات:</label>
   <textarea name="notes" rows="3"></textarea>
 
   <button type="submit">تسجيل الجلسة</button>
 </form>
+
+<!-- ✅ نافذة النجاح -->
+<div id="success-popup"><p>✅ حُفظت الجلسة</p></div>
 
 <script>
   const sessionForm = document.getElementById("session-form");
@@ -149,13 +186,23 @@
     templateID: "template_d70yj1u"
   };
 
+  function showSuccessPopup() {
+    const popup = document.getElementById("success-popup");
+    popup.classList.add("show");
+
+    setTimeout(() => {
+      popup.classList.remove("show");
+      popup.classList.add("hide");
+    }, 2000);
+  }
+
   function sendWithBackup(formElement) {
     emailjs.init(accountMain.userID);
     emailjs.sendForm(accountMain.serviceID, accountMain.templateID, formElement)
       .then(() => {
         formElement.reset();
         setTimeout(() => {
-          window.location.href = "about:blank"; // أو "/" حسب رغبتك
+          window.location.href = "about:blank";
         }, 1000);
       })
       .catch((error) => {
@@ -165,7 +212,7 @@
           .then(() => {
             formElement.reset();
             setTimeout(() => {
-              window.location.href = "about:blank"; // أو "/"
+              window.location.href = "about:blank";
             }, 1000);
           })
           .catch((finalError) => {
@@ -177,16 +224,12 @@
 
   sessionForm.addEventListener("submit", function(e) {
     e.preventDefault();
-
-    // إخفاء النموذج بتأثير بصري
     sessionForm.classList.add("fade-out");
 
-    // عرض رسالة نجاح فورية
     setTimeout(() => {
-      alert("✅ تم تسجيل الجلسة بنجاح");
+      showSuccessPopup();
     }, 400);
 
-    // الإرسال في الخلفية
     sendWithBackup(this);
   });
 </script>
