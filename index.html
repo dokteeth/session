@@ -2,6 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>تسجيل جلسة علاج</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
@@ -11,9 +12,20 @@
       color: white;
       font-family: 'Cairo', sans-serif;
       padding: 30px;
+      margin: 0;
       direction: rtl;
       text-align: right;
+      overflow-x: hidden;
     }
+
+    h2 {
+      text-align: center;
+      color: #F4C542;
+      font-weight: bold;
+      margin-bottom: 30px;
+      font-size: 28px;
+    }
+
     form {
       background: rgba(255,255,255,0.1);
       padding: 25px;
@@ -21,30 +33,81 @@
       backdrop-filter: blur(12px);
       max-width: 500px;
       margin: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      opacity: 0;
+      transform: translateY(50px);
+      animation: fadeInUp 1s ease-out forwards;
     }
+
+    /* حركة الدخول */
+    @keyframes fadeInUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* حركة الخروج */
+    .fade-out {
+      animation: fadeOut 0.6s ease forwards;
+    }
+
+    @keyframes fadeOut {
+      to {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+    }
+
     label {
-      display: block;
-      margin-top: 15px;
       color: #F4C542;
       font-weight: bold;
+      margin-top: 10px;
     }
+
     input, textarea {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
       border-radius: 6px;
       border: 1px solid #ccc;
       font-size: 16px;
+      box-sizing: border-box;
     }
+
     button {
       background-color: #F4C542;
       color: #0A3D62;
       font-weight: bold;
       border: none;
       border-radius: 6px;
-      padding: 12px;
-      margin-top: 20px;
+      padding: 12px 20px;
       cursor: pointer;
+      margin: 20px auto 0;
+      display: block;
+    }
+
+    @media screen and (max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+
+      h2 {
+        font-size: 22px;
+      }
+
+      form {
+        padding: 20px;
+      }
+
+      input, textarea {
+        font-size: 15px;
+      }
+
+      button {
+        width: 100%;
+      }
     }
   </style>
 </head>
@@ -59,7 +122,7 @@
   <input type="date" name="session_date" required>
 
   <label>رقم الجلسة:</label>
-  <input type="text" name="session_number" required>
+  <input type="tel" name="session_number" pattern="[0-9]*" inputmode="numeric" required>
 
   <label>ملاحظات:</label>
   <textarea name="notes" rows="3"></textarea>
@@ -81,10 +144,21 @@
       .then(() => {
         alert("✅ تم إرسال الجلسة إلى البريد الإلكتروني بنجاح");
         sessionForm.reset();
+
+        // خروج بنعومة قبل الرجوع
+        sessionForm.classList.add("fade-out");
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 800);
       }, (error) => {
         alert("❌ حدث خطأ أثناء إرسال الجلسة");
         console.error(error);
       });
+  });
+
+  // خروج عند غلق الصفحة (إن أردت إضافة حركة عند المغادرة يدويًا)
+  window.addEventListener("beforeunload", () => {
+    sessionForm.classList.add("fade-out");
   });
 </script>
 
