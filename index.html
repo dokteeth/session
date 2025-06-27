@@ -123,7 +123,10 @@
   <input type="date" name="session_date" required>
 
   <label>رقم الجلسة:</label>
-  <input type="tel" name="session_number" pattern="[0-9]*" inputmode="numeric" required>
+  <input type="text" name="session_number"
+       pattern="[\d\u0660-\u0669]+"
+       inputmode="numeric"
+       required>
 
   <label>ملاحظات:</label>
   <textarea name="notes" rows="3"></textarea>
