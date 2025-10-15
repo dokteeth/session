@@ -73,7 +73,8 @@
   padding: 12px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  font-size: 16px;
+  font-size: 17px; /* أكبر من 16px لمنع التكبير */
+  -webkit-text-size-adjust: 100%; /* منع التكبير التلقائي في iOS */
   box-sizing: border-box;
   background: rgba(255, 255, 255, 0.15); /* شبه شفافة */
   color: #fff;
