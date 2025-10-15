@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+ <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>تسجيل جلسة علاج</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
@@ -73,15 +73,21 @@
   padding: 12px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  font-size: 17px; /* أكبر من 16px لمنع التكبير */
-  -webkit-text-size-adjust: 100%; /* منع التكبير التلقائي في iOS */
+  font-size: 17px; /* منع التكبير التلقائي */
   box-sizing: border-box;
-  background: rgba(255, 255, 255, 0.15); /* شبه شفافة */
+  background: rgba(255, 255, 255, 0.15);
   color: #fff;
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   outline: none;
   transition: all 0.3s ease;
+  -webkit-text-size-adjust: 100%; /* منع تعديل حجم النص في iOS */
+  touch-action: manipulation; /* تحسين التفاعل */
+}
+
+input:focus, textarea:focus {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: #F4C542;
 }
     /* توحيد عرض حقل التاريخ مع باقي الحقول */
 input[type="date"] {
