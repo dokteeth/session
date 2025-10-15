@@ -69,13 +69,25 @@
     }
 
     input, textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-      font-size: 16px;
-      box-sizing: border-box;
-    }
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  font-size: 16px;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.15); /* شبه شفافة */
+  color: #fff;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  outline: none;
+  transition: all 0.3s ease;
+}
+
+/* تأثير جميل عند التركيز أو المرور */
+input:focus, textarea:focus {
+  background: rgba(255, 255, 255, 0.25);
+  border-color: #F4C542;
+}
 
     button {
       background-color: #F4C542;
